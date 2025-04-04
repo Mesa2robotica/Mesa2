@@ -1,0 +1,91 @@
+from pybricks.hubs import PrimeHub
+from pybricks.pupdevices import Motor, ColorSensor, UltrasonicSensor, ForceSensor
+from pybricks.parameters import Button, Color, Direction, Port, Side, Stop
+from pybricks.robotics import DriveBase
+from pybricks.tools import wait, StopWatch
+
+hub = PrimeHub()
+#Inicialización de variables
+motor_izquierdo = Motor(Port.B)
+motor_derecho = Motor(Port.D,Direction.COUNTERCLOCKWISE)
+
+#Código de operación
+#primer cono
+motor_izquierdo.dc(90)
+motor_derecho.dc(90)
+wait(3000)
+motor_izquierdo.dc(90)
+motor_derecho.stop()
+wait(1500)
+motor_izquierdo.dc(90)
+motor_derecho.dc(90)
+wait(1500)
+motor_izquierdo.stop()
+motor_derecho.dc(90)
+wait(1500)
+#segundo cono
+motor_izquierdo.dc(90)
+motor_derecho.dc(90)
+wait(2500)
+
+motor_izquierdo.stop()
+motor_derecho.dc(90)
+wait(1500)
+motor_izquierdo.dc(90)
+motor_derecho.dc(90)
+wait(1500)
+
+motor_izquierdo.dc(90)
+motor_derecho.stop()
+wait(1500)
+motor_izquierdo.dc(90)
+motor_derecho.dc(90)
+wait(1000)
+"""
+#tercer cono
+motor_izquierdo.dc(90)
+motor_derecho.dc(90)
+wait(1000)
+motor_izquierdo.dc(90)
+motor_derecho.stop()
+wait(1500)
+motor_izquierdo.dc(90)
+motor_derecho.dc(90)
+wait(1000)
+motor_izquierdo.stop()
+motor_derecho.dc(90)
+wait(1500)
+"""
+"""
+motor_izquierdo.dc(90)
+motor_derecho.stop()
+wait(1500)
+motor_izquierdo.dc(90)
+motor_derecho.dc(90)
+wait(1500)
+"""
+"""
+#linea recta
+motor_izquierdo.dc(90)
+motor_derecho.dc(90)
+wait(1300)
+motor_izquierdo.dc(30)
+motor_derecho.dc(90)
+wait(1700)
+motor_izquierdo.dc(90)
+motor_derecho.dc(90)
+wait(500)
+"""
+
+"""
+#sin bateria
+motor_izquierdo.dc(30)
+motor_derecho.dc(90)
+wait(1500)
+motor_izquierdo.dc(90)
+motor_derecho.dc(30)
+wait(1500)
+motor_izquierdo.dc(30)
+motor_derecho.dc(90)
+wait(1500)
+"""
