@@ -1,0 +1,107 @@
+from pybricks.hubs import PrimeHub
+from pybricks.pupdevices import Motor, ColorSensor, UltrasonicSensor, ForceSensor
+from pybricks.parameters import Button, Color, Direction, Port, Side, Stop
+from pybricks.robotics import DriveBase
+from pybricks.tools import wait, StopWatch
+
+hub = PrimeHub()
+
+
+#Creacion de variable
+motor_izquierdo = Motor(Port.B)
+motor_derecho = Motor(Port.D,Direction.COUNTERCLOCKWISE)
+
+#comando de trabajo
+"""
+motor_izquierdo.run_angle(170*3,-110*3,wait=False)
+motor_derecho.run_angle(170*3,110*3,wait=False)
+wait(1500)
+"""
+
+#linea  1
+motor_izquierdo.run_time(360,3000,then=Stop.HOLD,wait=False)
+motor_derecho.run_time(360,3000,then=Stop.HOLD,wait=False)
+wait(4000)
+
+#giro 1
+
+motor_izquierdo.run_angle(170*3,350*3,wait=False)
+motor_derecho.stop()
+wait(1500)
+
+#linea 2
+
+motor_izquierdo.run_time(360,2500,then=Stop.HOLD,wait=False)
+motor_derecho.run_time(360,2500,then=Stop.HOLD,wait=False)
+wait(3500)
+
+#giro 2
+
+motor_derecho.run_angle(170*3,350*3,wait=False)
+motor_izquierdo.stop()
+wait(1500)
+
+#linea 3
+
+motor_izquierdo.run_time(360,2500,then=Stop.HOLD,wait=False)
+motor_derecho.run_time(360,2500,then=Stop.HOLD,wait=False)
+wait(3500)
+
+#giro 3
+
+motor_derecho.run_angle(170*3,350*3,wait=False)
+motor_izquierdo.stop()
+wait(1500)
+
+#linea 4
+
+motor_izquierdo.run_time(360,2500,then=Stop.HOLD,wait=False)
+motor_derecho.run_time(360,2500,then=Stop.HOLD,wait=False)
+wait(3500)
+
+#giro 4
+motor_izquierdo.run_angle(170*3,-110*3,wait=False)
+motor_derecho.run_angle(170*3,110*3,wait=False)
+wait(1500)
+
+"""
+motor_derecho.run_angle(180*2,350*2,wait=False)
+motor_izquierdo.stop()
+wait(1500)
+
+
+motor_derecho.run_angle(720,rotation_angle= 360,wait=True)
+motor_izquierdo.run_angle(720,rotation_angle= 180,wait=True)
+
+wait(2000)
+
+
+motor_izquierdo.run_time(720,6000,then=Stop.HOLD,wait=False)
+motor_derecho.run_time(720,6000,then=Stop.HOLD,wait=False)
+wait(1150)
+motor_izquierdo.run_angle(720,rotation_angle= 30,then=Stop.HOLD,wait=True)
+wait(45)
+
+
+motor_izquierdo.run_angle(720,rotation_angle= 90,then=Stop.HOLD,wait=True)
+wait(850)
+motor_izquierdo.run_time(720,6000,then=Stop.HOLD,wait=False)
+motor_derecho.run_time(-720,6000,then=Stop.HOLD,wait=False)
+wait(700)
+motor_izquierdo.run_angle(720,rotation_angle= 90,then=Stop.HOLD,wait=True)
+wait(850)
+motor_izquierdo.run_time(720,6000,then=Stop.HOLD,wait=False)
+motor_derecho.run_time(-720,6000,then=Stop.HOLD,wait=False)
+wait(1150)
+motor_izquierdo.run_angle(720,rotation_angle= 90,then=Stop.HOLD,wait=True)
+wait(850)
+motor_izquierdo.run_time(720,6000,then=Stop.HOLD,wait=False)
+motor_derecho.run_time(-720,6000,then=Stop.HOLD,wait=False)
+wait(700)
+motor_izquierdo.run_angle(720,rotation_angle= 90,then=Stop.HOLD,wait=True)
+wait(850)
+motor_izquierdo.run_time(720,6000,then=Stop.HOLD,wait=False)
+motor_derecho.run_time(-720,6000,then=Stop.HOLD,wait=False)
+wait(1150)
+
+"""
