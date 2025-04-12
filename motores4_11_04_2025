@@ -1,0 +1,170 @@
+from pybricks.hubs import PrimeHub
+from pybricks.pupdevices import Motor, ColorSensor, UltrasonicSensor, ForceSensor
+from pybricks.parameters import Button, Color, Direction, Port, Side, Stop
+from pybricks.robotics import DriveBase
+from pybricks.tools import wait, StopWatch
+
+hub = PrimeHub()
+
+
+#Creacion de variable
+motor_izquierdo = Motor(Port.B)
+motor_derecho = Motor(Port.D,Direction.COUNTERCLOCKWISE)
+
+
+#comando de trabajo
+
+#linea  1
+motor_izquierdo.run_time(360,3700,then=Stop.HOLD,wait=False)
+motor_derecho.run_time(360,3700,then=Stop.HOLD,wait=False)
+wait(4000)
+
+#giro diferencial 1
+motor_izquierdo.run_angle(170*3,110*3,wait=False)
+motor_derecho.run_angle(170*3,-110*3,wait=False)
+wait(1500)
+
+#linea  2
+motor_izquierdo.run_time(360,3500,then=Stop.HOLD,wait=False)
+motor_derecho.run_time(360,3500,then=Stop.HOLD,wait=False)
+wait(4500)
+
+#giro diferencial 2
+motor_izquierdo.run_angle(170*3,-110*3,wait=False)
+motor_derecho.run_angle(170*3,110*3,wait=False)
+wait(1500)
+
+#linea  3
+motor_izquierdo.run_time(360,2400,then=Stop.HOLD,wait=False)
+motor_derecho.run_time(360,2400,then=Stop.HOLD,wait=False)
+wait(3500)
+
+#giro diferencial 3
+motor_izquierdo.run_angle(170*3,-110*3,wait=False)
+motor_derecho.run_angle(170*3,110*3,wait=False)
+wait(1500)
+
+#linea  4
+motor_izquierdo.run_time(360,1470,then=Stop.HOLD,wait=False)
+motor_derecho.run_time(360,1470,then=Stop.HOLD,wait=False)
+wait(2500)
+
+#giro diferencial 4
+motor_izquierdo.run_angle(170*3,110*3,wait=False)
+motor_derecho.run_angle(170*3,-110*3,wait=False)
+wait(1500)
+
+#linea  5
+motor_izquierdo.run_time(360,1700,then=Stop.HOLD,wait=False)
+motor_derecho.run_time(360,1700,then=Stop.HOLD,wait=False)
+wait(2700)
+
+#giro diferencial 5
+motor_izquierdo.run_angle(170*3,110*3,wait=False)
+motor_derecho.run_angle(170*3,-110*3,wait=False)
+wait(1500)
+
+#linea  6
+motor_izquierdo.run_time(360,1600,then=Stop.HOLD,wait=False)
+motor_derecho.run_time(360,1600,then=Stop.HOLD,wait=False)
+wait(2500)
+
+#giro diferencial 6
+motor_izquierdo.run_angle(170*3,-110*3,wait=False)
+motor_derecho.run_angle(170*3,110*3,wait=False)
+wait(1500)
+
+#linea  7
+motor_izquierdo.run_time(360,4000,then=Stop.HOLD,wait=False)
+motor_derecho.run_time(360,4000,then=Stop.HOLD,wait=False)
+wait(5000)
+
+
+#colores
+hub.light.on(Color.CYAN)
+wait(500)
+
+hub.light.on(Color.BLACK)
+wait(500)
+
+hub.light.on(Color.BLUE)
+wait(500)
+
+hub.light.on(Color.BROWN)
+wait(500)
+
+hub.light.on(Color.GRAY)
+wait(500)
+
+hub.light.on(Color.GREEN)
+wait(500)
+
+hub.light.on(Color.MAGENTA)
+wait(500)
+
+hub.light.on(Color.NONE)
+wait(500)
+
+hub.light.on(Color.ORANGE)
+wait(500)
+
+hub.light.on(Color.RED)
+wait(500)
+
+hub.light.on(Color.VIOLET)
+wait(500)
+
+hub.light.on(Color.WHITE)
+wait(500)
+
+hub.light.on(Color.YELLOW)
+wait(500)
+
+
+#Vuelta
+#giro diferencial 1
+motor_izquierdo.run_angle(170*6,-110*6,wait=False)
+motor_derecho.run_angle(170*6,110*6,wait=False)
+wait(3000)
+
+#linea  1
+motor_izquierdo.run_time(360,4000,then=Stop.HOLD,wait=False)
+motor_derecho.run_time(360,4000,then=Stop.HOLD,wait=False)
+wait(5000)
+
+#giro diferencial 1
+motor_izquierdo.run_angle(170*3,110*3,wait=False)
+motor_derecho.run_angle(170*3,-110*3,wait=False)
+wait(1500)
+#linea  2
+motor_izquierdo.run_time(360,1600,then=Stop.HOLD,wait=False)
+motor_derecho.run_time(360,1600,then=Stop.HOLD,wait=False)
+wait(2500)
+#giro diferencial 2
+motor_izquierdo.run_angle(170*3,-110*3,wait=False)
+motor_derecho.run_angle(170*3,110*3,wait=False)
+wait(1500)
+#linea  3
+motor_izquierdo.run_time(360,1700,then=Stop.HOLD,wait=False)
+motor_derecho.run_time(360,1700,then=Stop.HOLD,wait=False)
+wait(2700)
+#giro diferencial 3
+motor_izquierdo.run_angle(170*3,-110*3,wait=False)
+motor_derecho.run_angle(170*3,110*3,wait=False)
+wait(1500)
+#linea  4
+motor_izquierdo.run_time(360,1470,then=Stop.HOLD,wait=False)
+motor_derecho.run_time(360,1470,then=Stop.HOLD,wait=False)
+wait(2500)
+#giro diferencial 4
+motor_izquierdo.run_angle(170*3,110*3,wait=False)
+motor_derecho.run_angle(170*3,-110*3,wait=False)
+wait(1500)
+#linea  5
+motor_izquierdo.run_time(360,2400,then=Stop.HOLD,wait=False)
+motor_derecho.run_time(360,2400,then=Stop.HOLD,wait=False)
+wait(3500)
+#giro diferencial 5
+motor_izquierdo.run_angle(170*3,110*3,wait=False)
+motor_derecho.run_angle(170*3,-110*3,wait=False)
+wait(1500)
