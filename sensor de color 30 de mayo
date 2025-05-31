@@ -1,0 +1,67 @@
+from pybricks.hubs import PrimeHub
+from pybricks.pupdevices import Motor, ColorSensor, UltrasonicSensor, ForceSensor
+from pybricks.parameters import Button, Color, Direction, Port, Side, Stop
+from pybricks.robotics import DriveBase
+from pybricks.tools import wait, StopWatch
+
+hub = PrimeHub()
+
+motor_izquierdo = Motor(Port.F,Direction.COUNTERCLOCKWISE) 
+motor_derecho= Motor(Port.E)
+sensor = ColorSensor (Port.D)
+
+"""
+while True:
+    # The standard color() method always "rounds" the
+    # measurement to the nearest "whole" color.
+    # That's useful for most applications.
+
+    # But you can get the original hue, saturation,
+    # and value without "rounding", as follows:
+    color = sensor.hsv()
+
+    # Print the results.
+    print(color)
+
+    # Wait so we can read the value.
+    wait(500)
+"""
+con_azul = 0
+con_negro = 0
+Color.GRAY = Color(h=210, s=19, v=13)
+Color.BLUE = Color(h=213, s=75, v=37)
+Color.RED = Color(h=351, s=87, v=49)
+Color.WHITE = Color(h=202, s=13, v=80)
+Color.BLACK = Color(h=180, s=17, v=15)
+Color.MAGENTA = Color(h=200, s=20, v=19)
+motor_izquierdo.run(500)
+motor_derecho.run(500)
+
+def girar1(con_azul):
+        motor_izquierdo.run_angle(1450,200,wait=False)
+        motor_derecho.run_angle(1450,-200,wait=False)
+        wait(750)
+        motor_izquierdo.run(500)
+        motor_derecho.run(500)
+        
+ 
+def girar2(con_azul):
+        motor_izquierdo.run_angle(1450,330,wait=False)
+        motor_derecho.run_angle(1450,330)
+        wait(750)
+        motor_izquierdo.run(500)
+        motor_derecho.run(500)
+        
+
+
+my_colors = (Color.BLACK, Color.BLUE,  Color.RED, Color.WHITE, Color.MAGENTA, Color.GRAY, Color.NONE)
+sensor.detectable_colors(my_colors)
+while True:
+    color = sensor.color()
+    print(color)
+    if color == Color.BLUE:
+        con_azul += 1
+    if con_azul == 1 or 4:   
+        girar1(con_azul)
+    if con_azul == 2 or 3:   
+        girar2(con_azul)
