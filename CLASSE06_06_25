@@ -1,0 +1,41 @@
+from pybricks.hubs import PrimeHub
+from pybricks.pupdevices import Motor, ColorSensor, UltrasonicSensor, ForceSensor
+from pybricks.parameters import Button, Color, Direction, Port, Side, Stop
+from pybricks.robotics import DriveBase
+from pybricks.tools import wait, StopWatch
+
+hub = PrimeHub()
+mi=Motor(Port.C,Direction.COUNTERCLOCKWISE)
+md=Motor(Port.B)
+precion = ForceSensor(Port.D)
+sensor = ColorSensor(Port.A)
+
+cont=0
+Color.BLUE = Color(h=214, s=71, v=24)
+my_colors = (Color.BLUE,Color.NONE)
+sensor.detectable_colors(my_colors)
+
+def avanzar():
+    mi.run(300)
+    md.run(300)
+       
+
+touch = precion.touched()
+
+while True:
+    touch = precion.touched()   
+    avanzar()
+
+
+    if sensor.color() == Color.BLUE:
+        wait(500)
+        cont=cont+1
+        print(cont) 
+
+
+    if touch == True:
+        mi.stop()
+        md.stop()
+        wait(1000)
+
+    
