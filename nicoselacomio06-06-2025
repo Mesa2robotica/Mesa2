@@ -1,0 +1,65 @@
+from pybricks.hubs import PrimeHub
+from pybricks.pupdevices import Motor, ColorSensor, UltrasonicSensor, ForceSensor
+from pybricks.parameters import Button, Color, Direction, Port, Side, Stop
+from pybricks.robotics import DriveBase
+from pybricks.tools import wait, StopWatch
+
+hub = PrimeHub()
+md = Motor(Port.B)
+mi= Motor(Port.A,Direction.COUNTERCLOCKWISE)
+sf = ForceSensor(Port.F)
+sc= ColorSensor (Port.E)
+contador = 0 
+
+#funciones
+def avanzar ():
+    md.run (250)
+    mi.run (250)
+def avanzarpoco():
+    """
+    md.run_angle(100, 90, wait=False)
+    mi.run_angle(100, 90)
+    """
+    
+"""
+while True:
+    h, s, v = sc.hsv()
+    print(sc.hsv())
+"""
+Color.WHITE = Color(h=205, s=15, v=80)
+Color.BLUE = Color(h=205, s=15, v=80)
+
+my_colors = (Color.WHITE, Color.BLUE,Color.NONE)
+sc.detectable_colors(my_colors)
+#
+
+#color = sensor.color()
+#
+#Color(h=215, s=83, v=32)
+#Color(h=213, s=81, v=34)
+#Color(h=212, s=42, v=55)
+
+#Color(h=205, s=15, v=80)
+while True: 
+    h, s, v = sc.hsv()
+    avanzar()
+    if (212 < h < 215) and (42 < s < 83) and (32 < v < 55):
+        print("es color azul") 
+        wait(500)
+        contador += 1
+        print(contador)
+        wait(500)
+    if sf.pressed():
+        print("se presiono")
+        mi.stop()
+        md.stop()
+        wait(500)
+        md.run_angle(300, -400, wait=False)
+        mi.run_angle(300, 400)
+        wait(400)
+        md.run_angle(300, -400, wait=False)
+        mi.run_angle(300, 400)
+        wait(400)
+        md.run_angle(300, -400,wait=False)
+        mi.run_angle(300, 400)
+        break 
