@@ -1,0 +1,107 @@
+from pybricks.hubs import PrimeHub
+from pybricks.pupdevices import Motor, ColorSensor, UltrasonicSensor, ForceSensor
+from pybricks.parameters import Button, Color, Direction, Port, Side, Stop
+from pybricks.robotics import DriveBase
+from pybricks.tools import wait, StopWatch
+
+hub = PrimeHub()
+motor_derecho = Motor(Port.F,Direction.COUNTERCLOCKWISE)
+motor_izquierdo = Motor(Port.B,Direction.CLOCKWISE)
+sensor = ColorSensor(Port.C)
+contador = 0
+contador_bloques = 0
+
+def giro():
+        motor_izquierdo.run_angle(180*3,110*3,wait=False)
+        motor_derecho.run_angle(180*3,-110*3,wait=False)
+        wait(750)
+def antigiro():
+        motor_izquierdo.run_angle(180*3,-110*3,wait=False)
+        motor_derecho.run_angle(180*3,110*3,wait=False)
+        wait(750)
+        """
+def avancecorto():
+        motor_izquierdo.run_time(360,2000,then=Stop.HOLD,wait=False)
+        motor_derecho.run_time(360,2000,then=Stop.HOLD,wait=False)
+        wait(1500)
+def avancemedio()
+        motor_izquierdo.run_time(360,2500,then=Stop.HOLD,wait=False)
+        motor_derecho.run_time(360,2500,then=Stop.HOLD,wait=False)
+        wait(3000)
+def avancelargo()
+        motor_izquierdo.run_time(360,5000,then=Stop.HOLD,wait=False)
+        motor_derecho.run_time(360,5000,then=Stop.HOLD,wait=False)
+        wait(6500)
+"""
+#Linea recta
+motor_derecho.run(220)
+motor_izquierdo.run(220)
+while True:
+    h, s, v = sensor.hsv()
+    print(h,s,v)
+#300 3 100
+#120 13 9
+#350 89 11 (rojo)
+#180 75 0
+    if (110<h<360) and (0< s < 90) and (0<v<100):
+        wait(500)
+        contador_bloques +=1
+        print( "contador_bloques")
+    if (110 < h <310) and ( 3< s <76) and (0< v <100):
+        wait (500)
+        contador = contador+1
+        print ("contador")
+    if contador_bloques == 3: 
+        motor_derecho.stop()
+        motor_izquierdo.stop()
+        wait(3000)    
+    if contador ==1:
+        giro()
+        motor_izquierdo.run_time(360,2000,then=Stop.HOLD,wait=False)
+        motor_derecho.run_time(360,2000,then=Stop.HOLD,wait=False)
+        wait(1500)
+        giro()
+        motor_izquierdo.run_time(360,5000,then=Stop.HOLD,wait=False)
+        motor_derecho.run_time(360,5000,then=Stop.HOLD,wait=False)
+        wait(6500)
+    if contador ==2:
+        giro()
+        motor_izquierdo.run_time(360,2000,then=Stop.HOLD,wait=False)
+        motor_derecho.run_time(360,2000,then=Stop.HOLD,wait=False)
+        wait(1500)
+        giro()
+        motor_izquierdo.run_time(360,2500,then=Stop.HOLD,wait=False)
+        motor_derecho.run_time(360,2500,then=Stop.HOLD,wait=False)
+        wait(3000)
+        otrogiro()
+        motor_izquierdo.run_time(360,2000,then=Stop.HOLD,wait=False)
+        motor_derecho.run_time(360,2000,then=Stop.HOLD,wait=False)
+        wait(1500)
+
+    if contador ==3:
+        giro()
+        motor_izquierdo.run_time(360,2000,then=Stop.HOLD,wait=False)
+        motor_derecho.run_time(360,2000,then=Stop.HOLD,wait=False)
+        wait(1500)
+        otrogiro()
+        motor_izquierdo.run_time(360,2000,then=Stop.HOLD,wait=False)
+        motor_derecho.run_time(360,2000,then=Stop.HOLD,wait=False)
+        wait(1500)
+
+"""
+giro()    
+wait(500)
+motor_izquierdo.run_time(360,2000,then=Stop.HOLD,wait=False)
+motor_derecho.run_time(360,2000,then=Stop.HOLD,wait=False)
+wait(1500)
+
+while True:
+    color = sensor.hsv()
+    print(color)
+    
+    Color(h=0, s=0, v=0)
+    Color(h=197, s=17, v=68)
+    Color(h=330, s=20, v=73)
+    Color(h=60, s=0, v=79)
+    Color rojo (h=351, s=88, v=32)
+"""
