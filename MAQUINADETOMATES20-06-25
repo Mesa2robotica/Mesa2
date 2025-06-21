@@ -1,0 +1,81 @@
+from pybricks.hubs import PrimeHub
+from pybricks.pupdevices import Motor, ColorSensor, UltrasonicSensor, ForceSensor
+from pybricks.parameters import Button, Color, Direction, Port, Side, Stop
+from pybricks.robotics import DriveBase
+from pybricks.tools import wait, StopWatch
+
+hub = PrimeHub()
+motor_izquierdo = Motor (Port.B, Direction.COUNTERCLOCKWISE)
+motor_derecho = Motor (Port.A, Direction.CLOCKWISE)
+sensor = ColorSensor (Port.C)
+"""
+while True:
+    h, s , v = sensor.hsv()
+    print (h, s, v)
+"""
+
+Color.GREEN = Color(h=156, s=68, v=20)
+Color.RED = Color(h=350, s=88, v=46)
+my_colors = (Color.GREEN, Color.RED, Color.NONE)
+sensor.detectable_colors(my_colors)
+
+contador_tomate_rojo = 0
+contador_de_bloques = 0
+contador_tomate_verde = 0
+def giro():
+    motor_derecho.run_angle(200,-290, wait=False)
+    motor_izquierdo.run_angle(200,290)
+    wait(2000)
+    motor_derecho.run_time(150,1000, wait=False)
+    motor_izquierdo.run_time(150,1000,)
+    wait(2000)
+    motor_derecho.run_time(-150,1000, wait=False)
+    motor_izquierdo.run_time(-150,1000,)
+    wait(2000)
+    motor_derecho.run_angle(200,310, wait=False)
+    motor_izquierdo.run_angle(200,-310)
+    wait(2000)
+
+def avanzar():
+    motor_derecho.run(200)
+    motor_izquierdo.run(200)
+    wait(1000)
+def parar():
+    motor_derecho.stop()
+    motor_izquierdo.stop()
+    wait(1000)
+
+motor_derecho.run(300)
+motor_izquierdo.run(300)
+while True:
+    h, s, v = sensor.hsv()
+
+    # Print the color.
+
+    
+    if (150< h <165) and (60<s<70) and (20<v<25):
+        parar()
+
+        print("verde")
+        for i in range(1):
+            hub.speaker.beep()
+            wait(1000)
+        contador_tomate_verde +=1
+        contador_de_bloques +=1
+        print(contador_tomate_verde)
+        avanzar()
+
+    if (350<h<360) and (85<s<90) and (30<v<50):
+        parar()
+        print("rojo")
+        hub.light.on(Color.RED)
+        wait(1000)
+        hub.light.off()
+        contador_tomate_rojo +=1
+        contador_de_bloques +=1
+        print(contador_tomate_rojo)
+        giro()
+        avanzar()
+    if contador_de_bloques == 6:
+        break
+
