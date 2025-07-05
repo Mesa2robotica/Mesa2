@@ -1,0 +1,116 @@
+from pybricks.hubs import PrimeHub
+from pybricks.pupdevices import Motor, ColorSensor, UltrasonicSensor, ForceSensor
+from pybricks.parameters import Button, Color, Direction, Port, Side, Stop
+from pybricks.robotics import DriveBase
+from pybricks.tools import wait, StopWatch
+
+hub = PrimeHub()
+motor_izquierdo = Motor(Port.E, Direction.COUNTERCLOCKWISE)
+motor_derecho = Motor(Port.F )
+sc = ColorSensor (Port.A)
+sult = UltrasonicSensor(Port.B)
+contador_lineas = 0
+
+Color.WHITE =Color(h=210 ,s= 19, v= 61)
+Color.BLUE = Color(h=218, s=86, v=26)
+Color.GREEN = Color(h=133, s=59, v=26)
+Color.YELLOW = Color(h= 52, s=75 , v=49)
+Color.BLACK = Color(h=330 , s= 13, v=9)
+Color.BROWN = Color(h=21 , s= 56, v=32)
+my_colors = (Color.BROWN, Color.BLACK, Color.BLUE,Color.RED,Color.WHITE,Color.YELLOW,Color.NONE)
+sc.detectable_colors(my_colors)
+
+"""
+while True: 
+    h, s, v = sc.hsv()
+    print (h, s, v)
+"""
+
+#GIROS
+def giro_completo():
+    motor_izquierdo.run (200)
+    motor_derecho.run (-200)
+    wait(3000)
+def giro_horario():
+    motor_izquierdo.run (200)
+    motor_derecho.run (-200)
+    wait(1500)
+def giro_antihorario():
+    motor_izquierdo.run (-200)
+    motor_derecho.run (200)
+    wait(1600)
+def giro_medioantihorario():
+    motor_izquierdo.run (-100)
+    motor_derecho.run (100)
+    wait(1600)
+def giro_mediohorario():
+    motor_izquierdo.run (100)
+    motor_derecho.run (-100)
+    wait(1600)
+def giro_mediohhorario():
+    motor_izquierdo.run (100)
+    motor_derecho.run (-100)
+    wait(800)
+
+#AVANCES
+def avance_corto():
+    motor_izquierdo.run (200)
+    motor_derecho.run (200)
+    wait(3500)  
+def avance_verde():
+    motor_izquierdo.run (200)
+    motor_derecho.run (200)
+    wait(8500)     
+def avance_amarillo():
+    motor_izquierdo.run (200)
+    motor_derecho.run (200)
+    wait(7000)   
+def avance_medio():
+    motor_izquierdo.run (200)
+    motor_derecho.run (200)
+    wait(11000)   
+def avance_largo():
+    motor_izquierdo.run (200)
+    motor_derecho.run (200)
+    wait(15000)   
+def avance_final():
+    motor_izquierdo.run (200)
+    motor_derecho.run (200)
+    wait(8000)  
+
+while True:
+    motor_derecho.run(200)
+    motor_izquierdo.run(200)
+    hub.display.number(contador_lineas)
+    h, s, v = sc.hsv()
+    print (h, s, v)
+#Color Verde
+    if (125<h<150) and (45<s<65) and (20<v<30):
+        giro_antihorario()
+        avance_verde()
+        giro_horario()
+    if (-1<h<310) and (-1<s<20) and (0<v<10):
+        contador_lineas = contador_lineas+1
+        wait(500)
+        print (contador_lineas)
+    if contador_lineas ==3:
+        giro_mediohhorario()
+        avance_final()
+#Color amarillo
+    if (50<h<55) and (65<s<78) and (45<v<55):
+        giro_completo()
+        avance_amarillo()
+        break
+#Color azul
+    if (210<h<225) and (70<s<90) and (20<v<30):
+        giro_horario()
+        avance_corto()
+        giro_antihorario()
+        avance_medio()
+        giro_medioantihorario()
+        avance_largo()
+        giro_mediohorario()
+        avance_corto()
+        giro_mediohhorario()
+        avance_final()
+
