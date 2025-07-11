@@ -1,0 +1,49 @@
+from pybricks.hubs import PrimeHub
+from pybricks.pupdevices import Motor, ColorSensor, UltrasonicSensor, ForceSensor
+from pybricks.parameters import Button, Color, Direction, Port, Side, Stop
+from pybricks.robotics import DriveBase
+from pybricks.tools import wait, StopWatch
+
+hub = PrimeHub()
+motor_izquierdo = Motor(Port.F, Direction.COUNTERCLOCKWISE)
+motor_derecho = Motor(Port.E)
+sult = UltrasonicSensor(Port.C) 
+stac = ForceSensor(Port.A)
+
+
+#Giros y retrocesos
+def giro_derecha():
+    motor_izquierdo.run_angle(190,181*2)
+    motor_derecho.stop()
+    
+
+def giro_izquierda():
+    motor_izquierdo.stop()
+    motor_derecho.run_angle(190,185*3)
+
+def freno_retroceso():
+    motor_derecho.stop()
+    motor_izquierdo.stop()
+    wait(1000)
+    motor_derecho.run(-100)
+    motor_izquierdo.run(-100)
+    wait(1900)
+
+while True:
+    motor_derecho.run(300)
+    motor_izquierdo.run(300)
+
+    if stac.touched() == True:
+        freno_retroceso()
+        if sult.distance()>0 and sult.distance()<120:
+            giro_izquierda()
+            print(sult.distance())
+        if sult.distance()>170:
+            giro_derecha()
+            print(sult.distance())
+"""
+while True:
+    sult.distance()
+    print(sult.distance())
+"""
+        
