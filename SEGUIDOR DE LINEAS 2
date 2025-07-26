@@ -1,0 +1,43 @@
+from pybricks.hubs import PrimeHub
+from pybricks.pupdevices import Motor, ColorSensor, UltrasonicSensor, ForceSensor
+from pybricks.parameters import Button, Color, Direction, Port, Side, Stop
+from pybricks.robotics import DriveBase
+from pybricks.tools import wait, StopWatch
+
+hub = PrimeHub()
+sensor_izquierdo = ColorSensor(Port.D)
+sensor_derecho = ColorSensor(Port.F)
+motor_izquierdo = Motor(Port.A ,Direction.COUNTERCLOCKWISE)
+motor_derecho= Motor(Port.B ,Direction.CLOCKWISE)
+"""
+#Comando de trabajo
+#Color.GREEN = Color(h=170, s=72, v=32)
+#Color.RED = Color(h=350, s=84, v=48)
+#Color.YELLOW = Color(h=52, s=67, v=66)
+Color.WHITE = Color(h=0, s=0, v=100)
+Color.BLACK = Color(h=225, s=22, v=34)
+my_colors = ( Color.WHITE, Color.BLACK, Color.NONE) 
+sensor_1.detectable_colors(my_colors)
+"""
+
+while True:
+
+    reflexión = sensor_izquierdo.reflection()
+    print (reflexión)
+    reflexión = sensor_derecho.reflection()
+    print (reflexión) 
+    
+    if sensor_izquierdo.reflection() < 70:
+        print ("LINEA IZQUIERDA")
+        motor_derecho.run(130)
+        motor_izquierdo.run(-100)
+
+    if sensor_derecho.reflection() < 65:
+        print ("LINEA DERECHA")
+        motor_derecho.run(-100)
+        motor_izquierdo.run(130)
+
+    if sensor_derecho.reflection()>65 and sensor_izquierdo.reflection() >70: 
+        motor_derecho.run(80)
+        motor_izquierdo.run(80)           
+    
