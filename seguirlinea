@@ -1,0 +1,41 @@
+from pybricks.hubs import PrimeHub
+from pybricks.pupdevices import Motor, ColorSensor, UltrasonicSensor, ForceSensor
+from pybricks.parameters import Button, Color, Direction, Port, Side, Stop
+from pybricks.robotics import DriveBase
+from pybricks.tools import wait, StopWatch
+
+hub = PrimeHub()
+sensor_izquierdo = ColorSensor(Port.A)
+sensor_derecho = ColorSensor(Port.B)
+#sensor_central = ColorSensor 
+motor_izquierdo = Motor(Port.F ,Direction.COUNTERCLOCKWISE)
+motor_derecho= Motor(Port.E ,Direction.CLOCKWISE)
+ultrasonido =UltrasonicSensor(Port.C)
+#Comando de trabajo
+def detenerse():
+    motor_derecho.stop()
+    motor_izquierdo.stop()
+
+while True:
+    distance = int(ultrasonido.distance()/10)
+    ri= sensor_izquierdo.reflection()
+    rd= sensor_derecho.reflection()
+    print(distance)
+    if distance < 5:
+        motor_derecho.stop()
+        motor_izquierdo.stop()
+    
+    if rd < 85 and distance >5: #Giro hacia la derecha
+        print ("giro hacia la derecha")
+        motor_derecho.run(-291)
+        motor_izquierdo.run(311)  
+
+    if ri < 85 and distance >5 : #Giro hacia la izquierda
+        print ("giro hacia la izquierda")
+        motor_derecho.run(306)
+        motor_izquierdo.run(-222)
+
+    if rd>80 and ri>80 and distance >5: 
+        motor_derecho.run(110)
+        motor_izquierdo.run(110)
+
