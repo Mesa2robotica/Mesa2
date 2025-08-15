@@ -14,7 +14,7 @@ rc= sensor_central.reflection()
 motor_izquierdo = Motor(Port.F ,Direction.COUNTERCLOCKWISE)
 motor_derecho= Motor(Port.E ,Direction.CLOCKWISE)
 ultrasonido =UltrasonicSensor(Port.C)
-
+contador=0
 def esquivar():
 
     motor_derecho.dc(95)
@@ -47,12 +47,15 @@ def esquivar():
             break
 
 while True:
+
     distance = int(ultrasonido.distance()/10)
+    hub.display.number(contador)
     print(distance)
     ri= sensor_izquierdo.reflection()
     rd= sensor_derecho.reflection()
     if distance < 6:
         esquivar()    
+        contador = contador+1
     if rd>88 and ri>88: #Avanzan ambos motores
         motor_derecho.dc(80)
         motor_izquierdo.dc(80)
