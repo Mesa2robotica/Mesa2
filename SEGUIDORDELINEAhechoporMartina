@@ -1,0 +1,72 @@
+from pybricks.hubs import PrimeHub
+from pybricks.pupdevices import Motor, ColorSensor, UltrasonicSensor, ForceSensor
+from pybricks.parameters import Button, Color, Direction, Port, Side, Stop
+from pybricks.robotics import DriveBase
+from pybricks.tools import wait, StopWatch
+
+hub = PrimeHub()
+sensor_izquierdo = ColorSensor(Port.A)
+sensor_derecho = ColorSensor(Port.B)
+sensor_central = ColorSensor(Port.D) 
+ri= sensor_izquierdo.reflection()
+rd= sensor_derecho.reflection()
+rc= sensor_central.reflection()
+motor_izquierdo = Motor(Port.F ,Direction.COUNTERCLOCKWISE)
+motor_derecho= Motor(Port.E ,Direction.CLOCKWISE)
+ultrasonido =UltrasonicSensor(Port.C)
+
+def esquivar():
+
+    motor_derecho.dc(95)
+    motor_izquierdo.dc(-95)
+    wait(1200)
+    motor_derecho.dc(65)
+    motor_izquierdo.dc(77)
+    wait(3000)
+    motor_derecho.dc(-95)
+    motor_izquierdo.dc(95)
+    wait(700)
+
+    while True:
+        ri= sensor_izquierdo.reflection()
+        rd= sensor_derecho.reflection()
+        
+        if rd>88 and ri>88:
+            motor_derecho.dc(37)
+            motor_izquierdo.dc(85)
+        
+        if rd<88:
+            motor_derecho.dc(70)
+            motor_izquierdo.dc(-35)
+            wait(1100)
+            break
+        if ri<88:
+            motor_derecho.dc(70)
+            motor_izquierdo.dc(-35)
+            wait(1500)
+            break
+
+while True:
+    distance = int(ultrasonido.distance()/10)
+    print(distance)
+    ri= sensor_izquierdo.reflection()
+    rd= sensor_derecho.reflection()
+    if distance < 6:
+        esquivar()    
+    if rd>88 and ri>88: #Avanzan ambos motores
+        motor_derecho.dc(80)
+        motor_izquierdo.dc(80)
+        print ("avanzar")
+    if rd < 88 and ri>88: #Si el sensor derecho es negro el motor izquierdo avanza
+        print ("giro hacia la derecha")
+        motor_derecho.dc(-62)
+        motor_izquierdo.dc(77) 
+    if ri <88 and rd>88 : #Si el sensor izquierdo es negro el motor derecho avanza
+        print ("giro hacia la izquierda")
+        motor_derecho.dc(92)
+        motor_izquierdo.dc(-67)
+
+
+
+
+
