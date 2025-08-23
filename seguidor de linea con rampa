@@ -1,0 +1,78 @@
+from pybricks.hubs import PrimeHub
+from pybricks.pupdevices import Motor, ColorSensor, UltrasonicSensor, ForceSensor
+from pybricks.parameters import Button, Color, Direction, Port, Side, Stop
+from pybricks.robotics import DriveBase
+from pybricks.tools import wait, StopWatch
+
+hub = PrimeHub()
+
+si = ColorSensor(Port.A)
+sd = ColorSensor(Port.B)
+sensor_central = ColorSensor(Port.D) 
+mi = Motor(Port.F ,Direction.COUNTERCLOCKWISE)
+md= Motor(Port.E ,Direction.CLOCKWISE)
+
+Color.GREEN(h=169,s=73,v=52)
+Color.RED(h=20,s=61,v=91)
+#Color.BLACK(h=210,s=88,v=1)
+#Color.WHITE(h=0,s=0,v=100)
+my_colors = (Color.GREEN,Color.RED,Color.WHITE, Color.BLACK, Color.NONE)
+sd.detectable_colors(my_colors)
+si.detectable_colors(my_colors)
+
+while True:
+    ri= si.reflection()
+    rd= sd.reflection()
+    color = si.color()
+    h,s,v = si.hsv()
+    print(color)
+    print(h,s,v)
+  
+    if sd.color() == Color.GREEN:
+        if si.color() == Color.GREEN: 
+            print("doble verde derecho")
+            hub.light.on(Color.RED)
+            mi.dc(80)
+            md.dc(-80)
+            wait(3750)
+        else:
+            print ("verde derecho")
+            mi.dc(0)
+            md.dc(0)
+            wait(1000)            
+            mi.dc(85)
+            md.dc(-25)
+            wait(2300)
+            hub.light.on(Color.GREEN)
+    if si.color() == Color.GREEN:
+
+        if sd.color() == Color.GREEN: 
+            print("doble verde izquierdo")
+            hub.light.on(Color.RED)  
+            mi.dc(80)
+            md.dc(-80)
+            wait(3750)
+        else:
+            print("verde izquierdo")
+            mi.dc(0)
+            md.dc(0)
+            wait(1000)            
+            mi.dc(-25)
+            md.dc(75)
+            wait(2300)
+            hub.light.on(Color.GREEN)   
+        
+    
+    
+    if rd>88 and ri>88: #seguidor linea negra
+        md.dc(50)
+        mi.dc(50)
+        print ("avanzar")
+    if rd < 88 and ri>88: #Si el sensor derecho es negro el motor izquierdo avanza
+        print ("giro hacia la derecha")
+        md.dc(-62)
+        mi.dc(77) 
+    if ri <88 and rd>88 : #Si el sensor izquierdo es negro el motor derecho avanza
+        print ("giro hacia la izquierda")
+        md.dc(92)
+        mi.dc(-67)
