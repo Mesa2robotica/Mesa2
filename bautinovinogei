@@ -1,0 +1,186 @@
+from pybricks.hubs import PrimeHub
+from pybricks.pupdevices import Motor, ColorSensor, UltrasonicSensor, ForceSensor
+from pybricks.parameters import Button, Color, Direction, Port, Side, Stop
+from pybricks.robotics import DriveBase
+from pybricks.tools import wait, StopWatch
+
+hub = PrimeHub()
+
+sc = ColorSensor(Port.B)
+si = ColorSensor(Port.C)
+sd = ColorSensor(Port.F)
+mi = Motor(Port.A,Direction.COUNTERCLOCKWISE)
+md= Motor(Port.D,Direction.CLOCKWISE)
+
+#angulos
+angulo_inicial = 0.01
+angulo_deseado = 90.2
+
+#Calibración de colores
+Color.GREEN(h=165,s=75,v=52)
+Color.RED(h=20,s=61,v=91)
+#Color.BLACK(h=210,s=88,v=1)
+#Color.WHITE(h=0,s=0,v=100)
+my_colors = (Color.GREEN,Color.RED,Color.WHITE, Color.BLACK, Color.NONE)
+sd.detectable_colors(my_colors)
+si.detectable_colors(my_colors)
+
+#Funciones
+def doble_verde(): 
+    mi.stop()
+    md.stop()
+    wait(2000)
+    print("doble verde izquierdo")
+    hub.light.on(Color.RED)  
+    mi.dc(80)
+    md.dc(-80) 
+    wait(3750)
+
+
+def pausa_y_avance():
+    mi.dc(0) #esperar
+    md.dc(0) 
+    wait(1000) 
+    mi.dc(32) #avanzar
+    md.dc(32)     
+    wait(600)   
+
+def seguidor_de_linea():
+    if rd>88 and ri>88: #seguidor linea negra
+        md.dc(60)
+        mi.dc(60)
+        print ("avanzar")
+        hub.light.on(Color.BLACK)
+    if rd < 88 and ri>88: #Si el sensor derecho es negro el motor izquierdo avanza
+        print ("giro hacia la derecha")
+        md.dc(-70)
+        mi.dc(80) 
+        hub.light.on(Color.BLACK)
+    if ri <88 and rd>88 : #Si el sensor izquierdo es negro el motor derecho avanza
+        print ("giro hacia la izquierda")
+        md.dc(80)
+        mi.dc(-70)
+        hub.light.on(Color.BLACK)
+#    if rd<30 and ri<30: #seguidor linea negra
+#        md.dc(50)
+#        mi.dc(50)
+#        print ("avanzar")
+#        hub.light.on(Color.BLACK)
+
+def giro_derecho():
+    hub.imu.reset_heading(0) #Al detectar verde se reinicia el imu
+    while True:
+        angulo=hub.imu.heading()
+        if angulo< 40: #Si el ángulo es menor a 90 gira
+            mi.dc(75) 
+            md.dc(-25)
+        else: #Si es mayor o igual se detienen los motores
+            mi.stop()
+            md.stop()
+            wait(500)
+            break
+    if rc>70:
+            mi.dc(75) #giro
+            md.dc(15)
+    if rc<70:
+            mi.stop()
+            md.stop()
+            wait(500)
+
+def giro_izquierdo():
+    hub.imu.reset_heading(0) #Al detectar verde se reinicia el imu
+    while True:
+        angulo=hub.imu.heading()
+        if angulo>-40: #Si el ángulo es menor a -90 gira
+            mi.dc(-25) 
+            md.dc(75)
+        else: #Si es mayor o igual se detienen los motores
+            mi.stop()
+            md.stop()
+            wait(500)
+            break
+    if rc>70: #Utilizar el sensor central
+        mi.dc(-15) #giro
+        md.dc(75)
+    if rc<70:
+        mi.stop()
+        md.stop()
+        wait(500)
+
+#def avance_rampa_subida():
+ #       md.dc(60) #avance de rampa
+  #      mi.dc(60)
+   #     print ("subiendo")
+   #     hub.light.on(Color.BLACK)
+
+#def avance_rampa_bajada():
+ #   while True:
+  #      if hub.imu.tilt()[0] == 19:
+   #         md.stop()
+    #        mi.stop()
+     #       wait(2000)       
+
+#def rampa_subida():
+ #   while True:
+ #       hub.imu.tilt()
+  #      print(hub.imu.tilt())
+   #     if  hub.imu.tilt()[0] <-1:
+    #            avance_rampa_subida()
+     #   else:
+      #      break
+
+#def rampa_bajada():
+ #   while True:
+  #      hub.imu.tilt()
+   #     print(hub.imu.tilt())
+    #    if hub.imu.til()[0] == 1:
+     #       seguidor_linea_rampa()
+      #      if rc >70:
+       #         mi.dc(-15) 
+       #         md.dc(75)  
+        #else:
+         #   break                      
+while True:
+    angulo=hub.imu.heading()
+    x =hub.imu.tilt()[0]
+    y =hub.imu.tilt()[1]  
+    print(x) 
+#    print(y)
+#    print(angulo)
+    
+    
+    ri= si.reflection()
+    rd= sd.reflection()
+    rc= sc.reflection()
+    color = si.color()
+    h,s,v = si.hsv()
+    print(color)
+    print(h,s,v)
+
+    if sd.color() == Color.GREEN:
+        mi.dc(20)
+        md.dc(10)      
+        wait(475)
+        if si.color() == Color.GREEN: 
+            doble_verde()
+        else:
+            print ("verde derecho")
+            pausa_y_avance()       
+            giro_derecho()
+    if si.color() == Color.GREEN:
+        mi.dc(0)
+        md.dc(40)      
+        wait(475)
+        if sd.color() == Color.GREEN: #giro 180
+            doble_verde()
+        else: 
+            print("verde izquierdo")
+            pausa_y_avance()         
+            giro_izquierdo()
+    
+
+#    if x<-8:
+#        rampa_subida()
+#        print(x)
+    #SEGUIDOR DE LINEA 
+    seguidor_de_linea()
