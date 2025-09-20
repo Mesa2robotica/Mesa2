@@ -1,0 +1,239 @@
+from pybricks.hubs import PrimeHub
+from pybricks.pupdevices import Motor, ColorSensor
+from pybricks.parameters import Button, Color, Direction, Port, Side, Stop
+from pybricks.tools import wait, StopWatch
+
+hub = PrimeHub()
+
+# Sensores
+sc = ColorSensor(Port.B)  # Central
+si = ColorSensor(Port.C)  # Izquierdo
+sd = ColorSensor(Port.F)  # Derecho
+
+# Motores
+mi = Motor(Port.A, Direction.COUNTERCLOCKWISE)
+md = Motor(Port.D, Direction.CLOCKWISE)
+
+# Definir colores personalizados CORRECTAMENTE
+MY_GREEN = Color(h=165, s=75, v=52)
+MY_RED = Color(h=20, s=61, v=91)
+MY_BLACK = Color(h=210, s=88, v=1)
+MY_WHITE = Color(h=0, s=0, v=100)
+
+# Configurar colores detectables
+my_colors = (MY_GREEN, MY_RED, MY_WHITE, MY_BLACK, Color.NONE)
+sd.detectable_colors(my_colors)
+si.detectable_colors(my_colors)
+sc.detectable_colors(my_colors)
+
+# Constantes ajustables
+BLACK_THRESHOLD = 88
+BASE_SPEED = 60
+TURN_SPEED = 25
+GREEN_CONFIRM_DELAY = 475
+
+# Funciones mejoradas
+def doble_verde():
+    print("Doble verde - giro 180°")
+    hub.light.on(Color.RED)
+    mi.stop()
+    md.stop()
+    wait(2000)
+    
+    # Giro de 180 grados controlado por IMU
+    hub.imu.reset_heading(0)
+    target_angle = 180
+    
+    while abs(hub.imu.heading()) < target_angle - 10:
+        mi.dc(80)
+        md.dc(-80)
+        wait(10)
+    
+    # Ajuste fino
+    while abs(hub.imu.heading()) < target_angle:
+        mi.dc(40)
+        md.dc(-40)
+        wait(10)
+    
+    mi.stop()
+    md.stop()
+    wait(1000)
+    hub.light.off()
+
+def pausa_y_avance():
+    mi.stop()
+    md.stop()
+    wait(1000)
+    # Avance corto para reposicionarse
+    mi.dc(40)
+    md.dc(40)
+    wait(600)
+    mi.stop()
+    md.stop()
+    wait(500)
+
+def giro_derecho():
+    print("Giro derecho con IMU")
+    hub.imu.reset_heading(0)
+    target_angle = 90
+    
+    # Giro principal
+    while hub.imu.heading() < target_angle - 15:
+        mi.dc(75)
+        md.dc(-25)
+        wait(10)
+    
+    # Ajuste fino
+    while hub.imu.heading() < target_angle:
+        mi.dc(40)
+        md.dc(-15)
+        wait(10)
+    
+    mi.stop()
+    md.stop()
+    wait(500)
+    
+    # Buscar línea con sensor central
+    print("Buscando línea después del giro...")
+    timer = StopWatch()
+    while timer.time() < 3000:  # Máximo 3 segundos
+        if sc.reflection() > 70:  # Si está en blanco
+            mi.dc(40)
+            md.dc(15)  # Girar suavemente
+        else:
+            break
+        wait(10)
+    
+    mi.stop()
+    md.stop()
+    wait(500)
+
+def giro_izquierdo():
+    print("Giro izquierdo con IMU")
+    hub.imu.reset_heading(0)
+    target_angle = -90
+    
+    # Giro principal
+    while hub.imu.heading() > target_angle + 15:
+        mi.dc(-25)
+        md.dc(75)
+        wait(10)
+    
+    # Ajuste fino
+    while hub.imu.heading() > target_angle:
+        mi.dc(-15)
+        md.dc(40)
+        wait(10)
+    
+    mi.stop()
+    md.stop()
+    wait(500)
+    
+    # Buscar línea con sensor central
+    print("Buscando línea después del giro...")
+    timer = StopWatch()
+    while timer.time() < 3000:  # Máximo 3 segundos
+        if sc.reflection() > 70:  # Si está en blanco
+            mi.dc(-15)
+            md.dc(40)  # Girar suavemente
+        else:
+            break
+        wait(10)
+    
+    mi.stop()
+    md.stop()
+    wait(500)
+
+def seguidor_de_linea():
+    ri = si.reflection()
+    rd = sd.reflection()
+    rc = sc.reflection()
+    
+    if rd > BLACK_THRESHOLD and ri > BLACK_THRESHOLD:
+        # Ambos en blanco - avanzar recto
+        md.dc(BASE_SPEED)
+        mi.dc(BASE_SPEED)
+        print("Avanzar recto")
+        hub.light.on(Color.WHITE)
+        
+    elif rd < BLACK_THRESHOLD and ri > BLACK_THRESHOLD:
+        # Derecho en negro - girar derecha
+        md.dc(-TURN_SPEED)
+        mi.dc(BASE_SPEED + TURN_SPEED)
+        print("Girar derecha")
+        hub.light.on(Color.BLUE)
+        
+    elif ri < BLACK_THRESHOLD and rd > BLACK_THRESHOLD:
+        # Izquierdo en negro - girar izquierda
+        md.dc(BASE_SPEED + TURN_SPEED)
+        mi.dc(-TURN_SPEED)
+        print("Girar izquierda")
+        hub.light.on(Color.BLUE)
+        
+    else:
+        # Ambos en negro - caso especial (cruce)
+        md.dc(BASE_SPEED - 10)
+        mi.dc(BASE_SPEED - 10)
+        print("Cruce - avanzar cuidadosamente")
+        hub.light.on(Color.YELLOW)
+
+def verificar_verde():
+    """Verifica si hay verde y confirma con un pequeño avance"""
+    color_d = sd.color()
+    color_i = si.color()
+    
+    verde_detectado = False
+    accion = None  # 'doble', 'derecho', 'izquierdo'
+    
+    if color_d == MY_GREEN or color_i == MY_GREEN:
+        # Pequeño avance para confirmar
+        mi.dc(30)
+        md.dc(30)
+        wait(GREEN_CONFIRM_DELAY)
+        mi.stop()
+        md.stop()
+        wait(100)
+        
+        # Verificar después del avance
+        color_d_final = sd.color()
+        color_i_final = si.color()
+        
+        if color_d_final == MY_GREEN and color_i_final == MY_GREEN:
+            verde_detectado = True
+            accion = 'doble'
+        elif color_d_final == MY_GREEN:
+            verde_detectado = True
+            accion = 'derecho'
+        elif color_i_final == MY_GREEN:
+            verde_detectado = True
+            accion = 'izquierdo'
+    
+    return verde_detectado, accion
+
+# Bucle principal
+while True:
+    # Lectura de sensores
+    ri = si.reflection()
+    rd = sd.reflection()
+    rc = sc.reflection()
+    
+    # Verificar verde
+    hay_verde, accion = verificar_verde()
+    
+    if hay_verde:
+        if accion == 'doble':
+            doble_verde()
+        elif accion == 'derecho':
+            print("Verde derecho confirmado")
+            pausa_y_avance()
+            giro_derecho()
+        elif accion == 'izquierdo':
+            print("Verde izquierdo confirmado")
+            pausa_y_avance()
+            giro_izquierdo()
+    else:
+        # Seguir línea normal
+        seguidor_de_linea()
+    
+    # Pequeña pausa para no saturar
+    wait(10)
