@@ -1,0 +1,162 @@
+from pybricks.hubs import PrimeHub
+from pybricks.pupdevices import Motor, ColorSensor, UltrasonicSensor, ForceSensor
+from pybricks.parameters import Button, Color, Direction, Port, Side, Stop
+from pybricks.robotics import DriveBase
+from pybricks.tools import wait, StopWatch
+
+hub = PrimeHub()
+
+
+
+motor_derecho= Motor (Port.F)
+motor_izquierdo = Motor (Port.E, Direction.COUNTERCLOCKWISE)
+sensor_d = ColorSensor (Port.B)
+sensor_i = ColorSensor (Port.A)
+sensor_m = ColorSensor (Port.D)
+
+
+Color.GREEN_I = Color(h=168, s=66, v=24)
+Color.GREEN_D = Color(h=173, s=69, v=27)
+Color.BLACK_I = Color(h=190, s=18, v=18)
+Color.BLACK_D = Color(h=210, s=27, v=24)
+Color.WHITE = Color(h=204, s=16, v=96)
+Color.GREEN_FALSO = Color(h=210, s=27, v=24)
+my_colorsi = (Color.GREEN_I, Color.BLACK_I, Color.WHITE, Color.NONE)
+
+my_colorsd = (Color.GREEN_D, Color.BLACK_D, Color.WHITE, Color.NONE)
+
+sensor_i.detectable_colors(my_colorsi)
+sensor_d.detectable_colors(my_colorsd)
+
+angini = 0
+angobj = 90
+
+def parar():
+    motor_derecho.stop()
+    motor_izquierdo.stop()
+    wait(2000)
+
+def avanzar():
+    motor_derecho.run(200)
+    motor_izquierdo.run(200)
+
+def avanzarpoquito():
+    motor_derecho.run(150)
+    motor_izquierdo.run(150)
+    wait(900)
+
+def retrocederpoquito():
+    motor_derecho.run(-150)
+    motor_izquierdo.run(-150)
+    wait(900)
+
+def giroeje():
+    motor_derecho.run(150)
+    motor_izquierdo.run(-150)
+    wait(3300)
+
+def giroverdeizq():
+    motor_derecho.run_angle(200, 250, wait=False)
+    motor_izquierdo.run_angle(200,-250)
+
+def giroverdeder():
+    motor_izquierdo.run_angle(200,250, wait=False)
+    motor_derecho.run_angle(200, -250)
+
+while True:
+
+    colord = sensor_d.hsv()
+    colori = sensor_i.hsv()
+    print (colori, colord)
+    x = hub.imu.heading()
+    print(x)
+    colorder = sensor_d.color()
+    refleciond = sensor_d.reflection()
+    colorizq = sensor_i.color()
+    reflecioni = sensor_i.reflection()
+    reflecionm = sensor_m.reflection()
+    colormed = sensor_m.color()
+
+#SEGUIDOR
+#ambos detectan blanco 
+    if sensor_d.reflection() >35 and sensor_d.reflection() <90 and sensor_i.reflection() >35 and sensor_i.reflection() <90:
+        motor_derecho.run (200)
+        motor_izquierdo.run (200)
+        print("avanzar")
+    #detecta blanco el derecho avanza
+    if sensor_d.reflection() >35 and sensor_d.reflection()  <90:
+        motor_derecho.run (150)
+        print("derecho avanza")
+#detecta negro retrocede 
+    if sensor_d.reflection() <15:
+        motor_izquierdo.run (50)
+        motor_derecho.run (-200)   
+        print("giro hacia la derecha")
+#detecta blanco el izquierdo avanza
+    if sensor_i.reflection() >35 and sensor_i.reflection() <90:
+        motor_izquierdo.run (150)
+        print("izquierdo avanza")
+#detecta negro retrocede 
+    if sensor_i.reflection() <15:
+        motor_derecho.run (50)
+        motor_izquierdo.run (-200)
+        print("giro hacia la izquierda")
+#detecta negro
+    if sensor_i.reflection() <15 and sensor_d.reflection() <15 and sensor_m.reflection() <15:
+        avanzarpoquito()
+#t derecha
+    if sensor_i.reflection() >35 and sensor_d.reflection() <15 and sensor_m.reflection() <15:
+        avanzarpoquito()
+#t izquierda
+
+    if sensor_i.reflection() <15 and sensor_d.reflection() >35 and sensor_m.reflection() <15:
+        avanzarpoquito()
+
+
+#DETECTA VERDE
+    
+    if sensor_d.color() == Color.GREEN_D:
+        hub.light.on(Color.RED)
+        wait(500)
+        parar()
+        hub.light.off()
+        motor_izquierdo.run_angle(100,50)
+        
+        if sensor_i.color() == Color.GREEN_I:
+            retrocederpoquito()
+          
+        giroverdeder()
+            
+               
+        if sensor_d.color() == Color.GREEN_FALSO:
+            print("flasoverde")
+
+        if sensor_m.reflection >35:
+            motor_izquierdo.run(130)
+            motor_derecho.run(30)
+            
+
+    if sensor_i.color() == Color.GREEN_I:
+        hub.light.on(Color.VIOLET)
+        wait(600)
+        parar()
+        hub.light.off()
+        motor_derecho.run_angle(100, 50)
+        
+        if sensor_d.color() == Color.GREEN_D:
+            retrocederpoquito()
+    
+        giroverdeizq()
+
+        if sensor_i.color() == Color.GREEN_FALSO:
+            print("flasoverde")
+
+    if sensor_d == Color.GREEN_D and sensor_i == Color.GREEN_I:
+
+        stop()
+        wait(1000)
+        hub.light.on(Color.GREEN)
+
+        motor_derecho.run_angle(200, 300, wait=False)
+        motor_izquierdo.run_angle(200, -300)
+        avanzar()
